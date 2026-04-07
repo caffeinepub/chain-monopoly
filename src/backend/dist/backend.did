@@ -1,0 +1,112 @@
+type UserId = principal;
+type Timestamp = int;
+type RollResult = 
+ variant {
+   Err: text;
+   Ok: record {
+         die1: nat;
+         die2: nat;
+         event: text;
+         newPosition: nat;
+       };
+ };
+type PropertyOwnership = 
+ record {
+   owner: UserId;
+   square: nat;
+ };
+type PlayerView = 
+ record {
+   cash: nat;
+   id: UserId;
+   inJail: bool;
+   isBankrupt: bool;
+   isReady: bool;
+   position: nat;
+ };
+type JoinGameResult = 
+ variant {
+   Err: text;
+   Ok: GameView;
+ };
+type GameView = 
+ record {
+   currency: Currency;
+   escrowLocked: bool;
+   events: vec GameEvent;
+   host: UserId;
+   id: GameId;
+   pendingBuySquare: opt nat;
+   phase: GamePhase;
+   players: vec PlayerView;
+   properties: vec PropertyOwnership;
+   stakeAmount: nat;
+   turnIndex: nat;
+ };
+type GamePhase = 
+ variant {
+   Finished;
+   Lobby;
+   Playing;
+ };
+type GameId = text;
+type GameEvent = 
+ record {
+   kind: EventKind;
+   player: UserId;
+   timestamp: Timestamp;
+ };
+type EventKind = 
+ variant {
+   Bankrupt;
+   GameStarted;
+   GameWon: record {winner: UserId;};
+   Moved: record {
+            from: nat;
+            to: nat;
+          };
+   PlayerJoined: record {player: UserId;};
+   PropertyBought: record {
+                     price: nat;
+                     square: nat;
+                   };
+   RentPaid: record {
+               amount: nat;
+               from: UserId;
+               to: UserId;
+             };
+   Rolled: record {
+             die1: nat;
+             die2: nat;
+           };
+   SentToJail;
+   TaxPaid: record {amount: nat;};
+ };
+type Currency = 
+ variant {
+   ICP;
+   ckBTC;
+ };
+type CreateGameArgs = 
+ record {
+   currency: Currency;
+   stakeAmount: nat;
+ };
+type BuyPropertyResult = 
+ variant {
+   Err: text;
+   Ok: GameView;
+ };
+service : {
+  buyProperty: (gameId: GameId) -> (BuyPropertyResult);
+  createGame: (args: CreateGameArgs) -> (GameView);
+  getEvents: (gameId: GameId, limit: nat) -> (vec GameEvent) query;
+  getGame: (gameId: GameId) -> (opt GameView) query;
+  getOrCreatePlayer: () -> (PlayerView);
+  getPlayer: (playerId: UserId) -> (opt PlayerView) query;
+  joinGame: (gameId: GameId) -> (JoinGameResult);
+  listOpenGames: () -> (vec GameView) query;
+  passProperty: (gameId: GameId) -> (JoinGameResult);
+  rollDice: (gameId: GameId) -> (RollResult);
+  setReady: (gameId: GameId) -> (JoinGameResult);
+}

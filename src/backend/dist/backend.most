@@ -1,0 +1,109 @@
+// Version: 3.0.0
+type Currency__884395579 = {#ICP; #ckBTC};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type EscrowRecord__143468634 =
+  {
+    currency : Currency__884395579;
+    gameId : GameId__669134594;
+    var lockedPlayers : [UserId__158757552];
+    var released : Bool;
+    stakeAmount : Nat;
+    var winner : ?UserId__158757552
+  };
+type EventKind__727314051 =
+  {
+    #Bankrupt;
+    #GameStarted;
+    #GameWon : {winner : UserId__158757552};
+    #Moved : {from : Nat; to : Nat};
+    #PlayerJoined : {player : UserId__158757552};
+    #PropertyBought : {price : Nat; square : Nat};
+    #RentPaid :
+      {amount : Nat; from : UserId__158757552; to : UserId__158757552};
+    #Rolled : {die1 : Nat; die2 : Nat};
+    #SentToJail;
+    #TaxPaid : {amount : Nat}
+  };
+type GameEvent__177783139 =
+  {
+    kind : EventKind__727314051;
+    player : UserId__158757552;
+    timestamp : Timestamp__301639476
+  };
+type GameId__669134594 = Text;
+type GamePhase__180237308 = {#Finished; #Lobby; #Playing};
+type Game__396010996 =
+  {
+    var createdAt : Timestamp__301639476;
+    var currency : Currency__884395579;
+    var escrowLocked : Bool;
+    var events : [GameEvent__177783139];
+    var host : UserId__158757552;
+    id : GameId__669134594;
+    var pendingBuySquare : ?Nat;
+    var phase : GamePhase__180237308;
+    var players : [Player__789849039];
+    var properties : [PropertyOwnership__226895810];
+    var stakeAmount : Nat;
+    var turnIndex : Nat
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type OldGame__81702123 =
+  {
+    var createdAt : Timestamp__301639476;
+    var currency : Currency__884395579;
+    var escrowLocked : Bool;
+    var events : [GameEvent__177783139];
+    var host : UserId__158757552;
+    id : GameId__669134594;
+    var phase : GamePhase__180237308;
+    var players : [Player__789849039];
+    var properties : [PropertyOwnership__226895810];
+    var stakeAmount : Nat;
+    var turnIndex : Nat
+  };
+type Player__789849039 =
+  {
+    var cash : Nat;
+    id : UserId__158757552;
+    var inJail : Bool;
+    var isBankrupt : Bool;
+    var isReady : Bool;
+    var jailTurns : Nat;
+    var position : Nat
+  };
+type PropertyOwnership__226895810 = {owner : UserId__158757552; square : Nat};
+type Timestamp__301639476 = Int;
+type UserId__158757552 = Principal;
+actor ({
+  in escrows : Map__605269027<GameId__669134594, EscrowRecord__143468634>;
+  in games : Map__605269027<GameId__669134594, OldGame__81702123>;
+  in players : Map__605269027<UserId__158757552, Player__789849039>
+}, {
+  stable escrows :
+    {
+      var root : Node__46230540<GameId__669134594, EscrowRecord__143468634>;
+      var size : Nat__490723111
+    };
+  stable games :
+    {
+      var root : Node__46230540<GameId__669134594, Game__396010996>;
+      var size : Nat__490723111
+    };
+  stable players :
+    {
+      var root : Node__46230540<UserId__158757552, Player__789849039>;
+      var size : Nat__490723111
+    }
+}) ;

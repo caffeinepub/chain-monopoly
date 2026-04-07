@@ -1,0 +1,25 @@
+{
+  "overview": "Chain Monopoly is a digital multiplayer Monopoly game for 2-4 players with real-money ICP and ckBTC betting. Players stake crypto before the game, compete on a full 40-space board with all classic properties, and the last player standing wins the entire pot via on-chain escrow payout.",
+  "features": [
+    "Full 40-space Monopoly board with all properties, railroads, and utilities",
+    "Real-money betting with ICP and ckBTC via on-chain escrow",
+    "Game lobby for 2-4 players with stake selection",
+    "Animated dice rolling and token movement",
+    "Property buying, rent collection, and bankruptcy detection",
+    "Automatic winner payout to wallet",
+    "Internet Identity authentication with live wallet balance",
+    "Game event log for all moves"
+  ],
+  "category": "games",
+  "tags": [
+    "monopoly",
+    "multiplayer",
+    "blockchain",
+    "icp",
+    "ckbtc",
+    "game",
+    "betting",
+    "defi"
+  ],
+  "last_updated": "2026-04-07T22:56:57.474Z"
+}
